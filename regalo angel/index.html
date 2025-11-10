@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sorpresa</title>
+  <link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      font-family: "Pixelify Sans", sans-serif;
+      margin: 0;
+      color: #fff;
+      overflow: hidden;
+      position: relative;
+      background: linear-gradient(to bottom, 
+        #ffb07c 0%, 
+        #ff8da1 40%, 
+        #c375ff 75%, 
+        #6d5bff 100%);
+    }
+
+    /* ☁️ Nubes pixeladas */
+    .nube {
+      position: absolute;
+      width: 80px;
+      height: 40px;
+      background: #fff;
+      box-shadow:
+        10px 0 #fff,
+        20px 0 #fff,
+        30px 0 #fff,
+        0 10px #fff,
+        10px 10px #fff,
+        20px 10px #fff,
+        30px 10px #fff,
+        40px 10px #fff,
+        10px 20px #fff,
+        20px 20px #fff;
+      opacity: 0.9;
+      image-rendering: pixelated;
+      animation: moverNube 70s linear infinite;
+      z-index: 0;
+    }
+
+    @keyframes moverNube {
+      from { left: -150px; }
+      to { left: 110%; }
+    }
+
+    /* 🐝 Abejita volando */
+    .abejita {
+      position: absolute;
+      bottom: 40%;
+      right: -150px;
+      width: 80px;
+      height: auto;
+      z-index: 1;
+      opacity: 0;
+      image-rendering: pixelated;
+      pointer-events: none;
+    }
+
+    @keyframes volarAbeja {
+      0% { right: -150px; transform: translateY(0) scaleX(1); opacity: 1; }
+      25% { transform: translateY(-20px) scaleX(1); }
+      50% { transform: translateY(10px) scaleX(1); }
+      100% { right: 110%; transform: translateY(0) scaleX(1); opacity: 1; }
+    }
+
+    .abierto .abejita {
+      animation: volarAbeja 10s linear forwards;
+      opacity: 1;
+    }
+
+    .cerrado .abejita {
+      opacity: 0;
+    }
+
+    /* ✨ Título */
+    h1 {
+      font-size: 3em;
+      text-align: center;
+      margin-bottom: 30px;
+      z-index: 2;
+      text-shadow: 2px 2px 0 #5d377b;
+    }
+
+    /* 💌 Sobre pixelado */
+    .contenedor {
+      position: relative;
+      width: 480px;
+      height: 320px;
+      background-color: #f5b8c3;
+      border: 4px solid #8a557b;
+      box-shadow: 0 8px 0 #8a557b, 0 12px 20px rgba(0, 0, 0, 0.3);
+      overflow: visible;
+      perspective: 1000px;
+      z-index: 2;
+      image-rendering: pixelated;
+    }
+
+    .superior {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 0;
+      height: 0;
+      border-left: 240px solid transparent;
+      border-right: 240px solid transparent;
+      border-top: 160px solid #e497ab;
+      transform-origin: top;
+      transition: transform 1s ease;
+      z-index: 4;
+      image-rendering: pixelated;
+    }
+
+    /* 📜 Carta */
+    .carta {
+      position: absolute;
+      bottom: -280px;
+      left: 50%;
+      transform: translateX(-50%) translateY(0);
+      width: 420px;
+      height: 260px;
+      background: repeating-linear-gradient(
+        45deg,
+        #f8e6ff,
+        #f8e6ff 10px,
+        #f4ddff 10px,
+        #f4ddff 20px
+      );
+      color: #3b245d;
+      border: 3px solid #6b4e71;
+      padding: 20px;
+      font-size: 22px;
+      line-height: 1.5;
+      text-align: center;
+      transition: transform 1.2s cubic-bezier(0.25, 1.5, 0.5, 1), opacity 0.5s ease;
+      box-shadow: 0 6px 0 #6b4e71, 0 6px 10px rgba(0, 0, 0, 0.3);
+      z-index: 1;
+      opacity: 0;
+      pointer-events: none;
+      image-rendering: pixelated;
+    }
+
+    .carta p {
+      font-family: "Pixelify Sans", sans-serif;
+      font-size: 22px;
+      margin: 0;
+      color: #3b245d;
+    }
+
+    /* 💗 Corazón pixelado */
+    .corazon {
+      position: absolute;
+      bottom: 35%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 64px;
+      height: 64px;
+      z-index: 5;
+      transition: opacity 0.5s ease;
+    }
+
+    .corazon img {
+      width: 64px;
+      height: 64px;
+      object-fit: contain;
+      animation: latido 1.2s infinite ease-in-out;
+      image-rendering: pixelated;
+    }
+
+    @keyframes latido {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.2); }
+    }
+
+    /* 🎮 Botones */
+    .botones {
+      margin-top: 25px;
+      z-index: 10;
+    }
+
+    .boton {
+      background-color: #6b4e71;
+      color: #fff;
+      border: none;
+      padding: 12px 24px;
+      margin: 5px;
+      border-radius: 0;
+      cursor: pointer;
+      font-family: "Pixelify Sans", sans-serif;
+      font-size: 20px;
+      transition: background 0.3s, transform 0.1s;
+      box-shadow: 0 4px 0 #4b3451;
+    }
+
+    .boton:hover {
+      background-color: #a57fc7;
+      transform: translateY(-2px);
+    }
+
+    /* 📜 Animaciones carta */
+    @keyframes rebote {
+      0% { transform: translateX(-50%) translateY(0); }
+      60% { transform: translateX(-50%) translateY(-300px); }
+      80% { transform: translateX(-50%) translateY(-270px); }
+      100% { transform: translateX(-50%) translateY(-290px); }
+    }
+
+    .abierto .superior { transform: rotateX(180deg); }
+    .abierto .carta { animation: rebote 1s ease forwards; opacity: 1; pointer-events: auto; }
+    .abierto .corazon { opacity: 0; }
+    .cerrado .superior { transform: rotateX(0); }
+    .cerrado .carta { transform: translateX(-50%) translateY(0); opacity: 0; pointer-events: none; transition: transform 1s ease, opacity 0.6s ease; }
+    .cerrado .corazon { opacity: 1; }
+
+    /* 🖼️ Galería */
+    .galeria {
+      display: flex;
+      gap: 20px;
+      margin-top: 40px;
+      opacity: 0;
+      transform: translateY(50px);
+      transition: opacity 1s ease, transform 1s ease;
+      z-index: 1;
+    }
+
+    .galeria img {
+      width: 180px;
+      height: 180px;
+      object-fit: cover;
+      border: 4px solid #fff;
+      box-shadow: 0 6px 10px rgba(0, 0, 0, 0.4);
+      border-radius: 0;
+      image-rendering: pixelated;
+      transition: transform 0.3s ease;
+    }
+
+    .galeria img:hover {
+      transform: scale(1.05);
+    }
+
+    .mostrarFotos {
+      opacity: 1 !important;
+      transform: translateY(0) !important;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ☁️ Nubes animadas -->
+  <div class="nube" style="top: 10%; animation-delay: 0s; animation-duration: 80s; transform: scale(1.1);"></div>
+  <div class="nube" style="top: 25%; animation-delay: 10s; animation-duration: 95s; transform: scale(1.3);"></div>
+  <div class="nube" style="top: 45%; animation-delay: 25s; animation-duration: 85s; transform: scale(0.9);"></div>
+  <div class="nube" style="top: 60%; animation-delay: 40s; animation-duration: 100s; transform: scale(1.2);"></div>
+
+  <!-- 🐝 Abejita -->
+  <img src="C:\Users\Berry\Downloads\abejita.gif" alt="abejita" class="abejita" id="abejita">
+
+  <h1>¡Feliz cumpleaños Ángel! ❤️</h1>
+
+  <div class="contenedor" id="sobre">
+    <div class="superior"></div>
+    <div class="carta" id="carta">
+      <p>
+        Agradezco todos los días que estés en mi vida y que me dejes ser parte de la tuya.<br>
+        Te amo mucho, angeloso, eres mi naco y estúpido favorito 💖  
+        <br><br>–Berry 🍓
+      </p>
+    </div>
+
+    <div class="corazon" id="corazon">
+      <img src="C:\Users\Berry\Downloads\corazn minecraft.png" alt="corazoncito">
+    </div>
+  </div>
+
+  <!-- 📸 Galería -->
+  <div class="galeria" id="galeria">
+    <img src="C:\Users\Berry\Downloads\primera foto omaiga.jpeg" alt="foto1">
+    <img src="C:\Users\Berry\Downloads\maikra.jpeg" alt="foto2">
+    <img src="C:\Users\Berry\Downloads\jawolin.jpeg" alt="foto3">
+    <img src="C:\Users\Berry\Downloads\anvorguesas.jpeg" alt="foto4">
+  </div>
+
+  <div class="botones">
+    <button class="boton" onclick="abrirSobre()">Abrir :D</button>
+    <button class="boton" onclick="cerrarSobre()">Cerrar D:</button>
+  </div>
+
+  <audio id="musica" src="C:\Users\Berry\Downloads\MineCraft Sunset - Mice on Venus - Peaceful [HD].mp3" loop></audio>
+
+  <script>
+    const sobre = document.getElementById('sobre');
+    const musica = document.getElementById('musica');
+    const abejita = document.getElementById('abejita');
+    const galeria = document.getElementById('galeria');
+    let musicaIniciada = false;
+
+    function fadeIn(audio, duration = 2000) {
+      audio.volume = 0;
+      let step = 0.05;
+      let interval = setInterval(() => {
+        if (audio.volume < 1) {
+          audio.volume = Math.min(audio.volume + step, 1);
+        } else {
+          clearInterval(interval);
+        }
+      }, duration * step);
+    }
+
+    function abrirSobre() {
+      sobre.classList.remove('cerrado');
+      sobre.classList.add('abierto');
+      abejita.style.opacity = '1';
+      galeria.classList.add('mostrarFotos');
+
+      if (!musicaIniciada) {
+        musica.play().then(() => fadeIn(musica)).catch(e => console.log("Reproducción bloqueada:", e));
+        musicaIniciada = true;
+      }
+    }
+
+    function cerrarSobre() {
+      sobre.classList.remove('abierto');
+      sobre.classList.add('cerrado');
+      abejita.style.opacity = '0';
+      galeria.classList.remove('mostrarFotos');
+    }
+
+    cerrarSobre();
+  </script>
+</body>
+</html>
